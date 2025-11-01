@@ -52,3 +52,6 @@ htmlcov/
 *.swp
 *.swo
 .DS_Store
+
+# 音声データなど
+audio/
