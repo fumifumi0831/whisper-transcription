@@ -18,12 +18,14 @@
 ## インストール方法
 
 1. このリポジトリをクローンします：
+
 ```bash
 git clone https://github.com/fumifumi0831/whisper-transcription.git
 cd whisper-transcription
 ```
 
 2. 仮想環境を作成し、有効化します：
+
 ```bash
 python -m venv venv
 # Windowsの場合
@@ -33,6 +35,7 @@ source venv/bin/activate
 ```
 
 3. 必要なパッケージをインストールします：
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -47,12 +50,13 @@ pip install -r requirements.txt
 ### コマンドラインから使用
 
 ```bash
-python transcribe.py --file path/to/audio/file.mp3 --model base --language ja
+python transcribe.py --file path/to/audio/file.mp3 --model base --output ./ --language ja
 ```
 
 オプション:
+
 - `--file`: 文字起こしを行う音声ファイルへのパス（必須）
-- `--model`: 使用するWhisperモデルのサイズ（tiny, base, small, medium, large）。デフォルトは`base`
+- `--model`: 使用するWhisperモデルのサイズ（tiny, base, small, medium, large）。デフォルトは `base`
 - `--language`: 音声の言語（en, ja など）。指定しない場合、自動検出を試みます
 - `--output`: 出力テキストファイルのパス。指定しない場合、標準出力に表示します
 
