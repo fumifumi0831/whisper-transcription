@@ -44,7 +44,6 @@ htmlcov/
 *.ogg
 *.flac
 *.txt
-*.json
 
 # エディタ関連
 .idea/
@@ -55,3 +54,4 @@ htmlcov/
 
 # 音声データなど
 audio/
+node_modules
