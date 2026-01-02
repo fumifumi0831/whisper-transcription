@@ -7,6 +7,8 @@ import os
 import sys
 import time
 import tempfile
+import subprocess
+import platform
 import whisper
 import torch
 import streamlit as st
@@ -33,9 +35,21 @@ def load_whisper_model(model_name):
     return whisper.load_model(model_name, device=device)
 
 def check_ffmpeg():
-    """FFmpegがインストールされているか確認"""
-    if os.system("ffmpeg -version > /dev/null 2>&1") != 0:
-        st.error("⚠️ FFmpegがインストールされていません。https://ffmpeg.org/download.html からダウンロードしてください。")
+    """FFmpegがインストールされているか確認（subprocessを使用、OS非依存）"""
+    try:
+        subprocess.run(
+            ["ffmpeg", "-version"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        error_msg = "⚠️ FFmpegがインストールされていません。"
+        if platform.system() == "Windows":
+            error_msg += "\nhttps://ffmpeg.org/download.html からダウンロードし、PATHに追加してください。"
+        else:
+            error_msg += "\nhttps://ffmpeg.org/download.html からダウンロードしてください。"
+        st.error(error_msg)
         st.stop()
 
 def get_available_models():
