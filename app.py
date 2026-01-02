@@ -23,7 +23,13 @@ st.set_page_config(
 @st.cache_resource
 def load_whisper_model(model_name):
     """Whisperモデルをロードする（キャッシュ使用）"""
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    # CUDA優先、なければXPU、どちらもなければCPU
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif hasattr(torch, 'xpu') and torch.xpu.is_available():
+        device = "xpu"
+    else:
+        device = "cpu"
     return whisper.load_model(model_name, device=device)
 
 def check_ffmpeg():
@@ -71,7 +77,12 @@ def main():
     )
     
     # デバイス情報表示
-    device = "GPU (CUDA)" if torch.cuda.is_available() else "CPU"
+    if torch.cuda.is_available():
+        device = "GPU (CUDA)"
+    elif hasattr(torch, 'xpu') and torch.xpu.is_available():
+        device = "GPU (XPU)"
+    else:
+        device = "CPU"
     st.sidebar.info(f"使用デバイス: {device}")
     
     if device == "CPU":

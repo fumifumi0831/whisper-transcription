@@ -46,8 +46,13 @@ def transcribe_audio(file_path, model_name="base", language=None):
     print(f"モデル '{model_name}' をロード中...")
     start_time = time.time()
     
-    # GPUが利用可能かチェック
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    # GPUが利用可能かチェック（CUDA優先、なければXPU、どちらもなければCPU）
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif hasattr(torch, 'xpu') and torch.xpu.is_available():
+        device = "xpu"
+    else:
+        device = "cpu"
     print(f"デバイス: {device}")
     
     # モデルをロード
