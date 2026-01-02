@@ -5,6 +5,8 @@ Whisperを使用した音声文字起こしスクリプト
 
 import os
 import argparse
+import subprocess
+import platform
 import whisper
 import torch
 import time
@@ -12,10 +14,21 @@ import sys
 from datetime import datetime
 
 def check_ffmpeg():
-    """FFmpegがインストールされているか確認"""
-    if os.system("ffmpeg -version > /dev/null 2>&1") != 0:
-        print("エラー: FFmpegがインストールされていません。")
-        print("https://ffmpeg.org/download.html からダウンロードし、インストールしてください。")
+    """FFmpegがインストールされているか確認（subprocessを使用、OS非依存）"""
+    try:
+        subprocess.run(
+            ["ffmpeg", "-version"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        error_msg = "エラー: FFmpegがインストールされていません。"
+        if platform.system() == "Windows":
+            error_msg += "\nhttps://ffmpeg.org/download.html からダウンロードし、PATHに追加してください。"
+        else:
+            error_msg += "\nhttps://ffmpeg.org/download.html からダウンロードしてください。"
+        print(error_msg)
         sys.exit(1)
 
 def get_available_models():

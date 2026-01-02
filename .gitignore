@@ -35,6 +35,13 @@ venv.bak/
 .coverage
 htmlcov/
 
+# テストファイル
+test_device_selection.py
+test_ffmpeg_check.py
+
+# サンプル・例
+examples/
+
 # ログとデータファイル
 *.log
 *.csv
